@@ -1,0 +1,110 @@
+---
+title: "Bike Share Case Study"
+output:
+  html_document:
+    toc: true
+    theme: united
+---
+
+# Bike Share Case Study
+
+Google Data Analytics Certificate Capstone Project
+
+
+## Scenario
+
+You are a junior data analyst working in the marketing analyst team at
+Cyclistic, a bike-share company in Chicago. The director of marketing
+believes the company's future success depends on maximizing the number
+of annual memberships. Therefore, your team wants to understand how
+casual riders and annual members use Cyclistic bikes differently. From
+these insights, your team will design a new marketing strategy to
+convert casual riders into annual members. But first, Cyclistic
+executives must approve your recommendations, so they must be backed up
+with compelling data insights and professional data visualizations.
+
+### Deliverables
+
+1.  A clear summary of the business task
+2.  A description of all data sources used
+3.  Documentation of any cleaning or manipulation of data
+4.  A summary of your analysis
+5.  Supporting visualizations and key findings
+6.  High-level content recommendations based on your analysis
+
+
+
+## Data Analysis Process <a name="Data_Analysis_Process"></a>
+
+### 1) ASK
+
+##### Guiding Questions
+-   How do annual members and casual riders use Cyclistic bikes
+    differently?
+-   Why would casual riders buy Cyclistic annual memberships?
+-   How can Cyclistic use digital media to influence casual riders to
+    become members?
+
+##### Consider key stakeholders
+
+-   **Lily Moreno:** The director of marketing and your manager. Moreno
+    is responsible for the development of campaigns and initiatives to
+    promote the bike-share program. These may include email, social
+    media, and other channels.
+-   **Cyclistic executive team:** The notoriously detail-oriented
+    executive team will decide whether to approve the recommended
+    marketing program.
+
+##### Identify the Business Task 
+Both the Director of Marketing and finance analysts have concluded that 
+annual members are more profitable. 
+
+I will present marketing strategies aimed at converting casual riders 
+into annual members. 
+
+### 2) PREPARE
+
+##### Download data and store it appropriately.
+Data was retrieved from the [Kaggle Cyclistic Bike Share dataset](https://www.kaggle.com/datasets/evangower/cyclistic-bike-share). 
+12 CSV files were downloaded and saved locally prior to importing the files 
+into RStudio.
+
+##### Identify how it’s organized. 
+12 months (April 2021 - March 2022) of Cyclistic Bike Share data is organized
+into 12 separate CSV (comma separated values) files. There are 15 columns per 
+CSV with varying data types.
+
+##### Verify the data's credibility.
+
+
+### 3) PROCESS 
+
+##### Check the data for errors.
+
+##### Choose your tools.
+- **Excel** - Preview the data initially, referenced any errors that 
+arose during the cleaning process, and added the ride_length column.
+- **R** - Clean, Process, and initial data visualizations.
+- **Tableau** - Visualize the data and create a dashboard.
+
+##### Transform the data so you can work with it effectively. 
+
+git config --global http.version HTTP/1.1
+
+##### Document the cleaning process.
+
+
+## Sources
+
+<https://www.kaggle.com/datasets/arashnic/fitbit>
+
+## Tools
+
+-   Github
+-   BigQuery
+-   Visual Studio Code
+-   Excel
+
+Notes: started to work on the data set and realized its less than 2
+months of data, sample size of 30 people, and it was supposed to be for
+women , but the mix is men and women
