@@ -4,3 +4,7 @@
 *.Ruserdata
 *.html
 *.csv
+*.Rproj.user
+*.RDataTmp
+*.Rproj
+

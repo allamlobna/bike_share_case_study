@@ -75,6 +75,7 @@ into 12 separate CSV (comma separated values) files. There are 15 columns per
 CSV with varying data types.
 
 ##### Verify the data's credibility.
+The provided data
 
 
 ### 3) PROCESS 
@@ -89,10 +90,222 @@ arose during the cleaning process, and added the ride_length column.
 
 ##### Transform the data so you can work with it effectively. 
 
-git config --global http.version HTTP/1.1
+**Spreadsheets - Excel**
+
+a) Added a column to each CSV file, *ride_length*, and formatted as HH:MM:SS. 
+=(ended_at - started_at)
+b) Created a column in all CSVs called *day_of_week*, and calculated 
+the day of the week that each ride started using the “WEEKDAY” function.
+
+**R - RStudio and Github for rev. control**
+
+c) Installed all necessary packages.
+```{r, eval= FALSE}
+
+install.packages(tidyverse)
+install.packages(lubridate)
+install.packages(ggplot2)
+install.packages(janitor)
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+library(janitor)
+
+```
+d) Imported all data sets.
+
+```{r, eval= FALSE}
+april_21_trip_data <- read_csv("202104-divvy-tripdata.csv")
+may_21_trip_data <- read_csv("202105-divvy-tripdata.csv")
+june_21_trip_data <- read_csv("202106-divvy-tripdata.csv")
+july_21_trip_data <- read_csv("202107-divvy-tripdata.csv")
+aug_21_trip_data <- read_csv("202108-divvy-tripdata.csv")
+sep_21_trip_data <- read_csv("202109-divvy-tripdata.csv")
+oct_21_trip_data <- read_csv("202110-divvy-tripdata.csv")
+nov_21_trip_data <- read_csv("202111-divvy-tripdata.csv")
+dec_21_trip_data <- read_csv("202112-divvy-tripdata.csv")
+jan_22_trip_data <- read_csv("202201-divvy-tripdata.csv")
+feb_22_trip_data <- read_csv("202202-divvy-tripdata.csv")
+march_22_trip_data <- read_csv("202203-divvy-tripdata.csv")
+```
+e) When importing CSV files, warning message about parsing issues arose. This 
+was due to *docked_bike* rows having a ride_length of multiple days. Excel did 
+not format these columns as HH:MM:SS, however, because *docked_bike* 
+rider_types were to be removed as part of the cleaning process, nothing 
+was done during this step. problem() was used after removing *docked_bike* rows 
+and the data did not have any parsing issues.
+
+```{r, eval= FALSE}
+problems(april_21_trip_data)
+problems(may_21_trip_data)
+problems(june_21_trip_data)
+#...
+problems(march_22_trip_data)
+```
+
+f) Wrangled data and combined into single file. Using Janitor package, compared 
+columns in data frames for inconsistencies. None found.
+
+```{r, eval= FALSE}
+compare_df_cols(april_21_trip_data,
+                may_21_trip_data, 
+                june_21_trip_data,
+                july_21_trip_data, 
+                aug_21_trip_data,
+                sep_21_trip_data,
+                oct_21_trip_data,
+                nov_21_trip_data,
+                dec_21_trip_data,
+                jan_22_trip_data,
+                feb_22_trip_data,
+                march_22_trip_data,
+                return = "mismatch")
+```
+
+g) Combined all data frames into one master data frame *total_trip_data*.
+
+```{r, eval= FALSE}
+total_trip_data <- rbind(april_21_trip_data,
+                         may_21_trip_data, 
+                         june_21_trip_data,
+                         july_21_trip_data, 
+                         aug_21_trip_data,
+                         sep_21_trip_data,
+                         oct_21_trip_data,
+                         nov_21_trip_data,
+                         dec_21_trip_data,
+                         jan_22_trip_data,
+                         feb_22_trip_data,
+                         march_22_trip_data)
+```
 
 ##### Document the cleaning process.
 
+a) Confirmed there are two types of members and three types of bikes.
+Members: casual, member
+Bikes: *classic_bike, electric_bike, docked_bike*
+
+```{r, eval= FALSE}
+rider_types <- total_trip_data %>%
+  group_by(rideable_type, member_casual)
+
+summarize(rider_types)
+```
+
+b) *docked_bike* is when bikes were taken out of docks and checked for quality.
+This is irrelevant to the study, so removed from *total_trip_data*. Obtained 
+total number of docked_bike to ensure that total removed is correct
+
+```{r, eval= FALSE}
+table(total_trip_data$rideable_type)
+
+#classic_bike   docked_bike electric_bike 
+#2790047        321282       1272661
+
+total_trip_data <- 
+  total_trip_data[!grepl('docked_bike', total_trip_data$rideable_type),]
+
+table(total_trip_data$rideable_type)
+
+#classic_bike electric_bike 
+#2790047       1272661
+```
+
+c) Confirmed that there are no problems found in the data frame as expected in 
+step e.
+```{r, eval= FALSE}
+problems(total_trip_data)
+```
+
+d) *start_station_name*, *end_station_name*, *start_station_id*, and *end_station_id* have over 700,000 null values. Columns were removed as the latitude and longitude can be used for ride paths. This also reduced the overall data set size to be less than 1GB and can be used on Tableau Public.
+
+```{r, eval= FALSE}
+#Removed start_station_name and end_station_name columns
+sum(is.na(total_trip_data$start_station_name))
+sum(is.na(total_trip_data$end_station_name))
+
+total_trip_data = subset(total_trip_data, select = 
+                           -c(start_station_name,end_station_name))
+
+#Removed start_station_id and end_station_id columns
+sum(is.na(total_trip_data$start_station_id))
+sum(is.na(total_trip_data$end_station_id))
+
+total_trip_data = subset(total_trip_data, select = 
+                           -c(start_station_id,end_station_id))
+```
+
+e) To find max and min *ride_length*, must convert to seconds. Originally in 
+HMS then converted to the nearest second.
+```{r, eval= FALSE}
+total_trip_data$ride_length <- seconds(hms(total_trip_data$ride_length))
+total_trip_data$ride_length <- period_to_seconds(total_trip_data$ride_length)
+sum(is.na(total_trip_data$ride_length))
+
+#145 NA 
+```
+
+f) Remove all rows with NA *ride_length* values and check that all have been removed.
+
+```{r, eval= FALSE}
+total_trip_data <- drop_na(total_trip_data, ride_length)
+sum(is.na(total_trip_data$ride_length))
+#no NA values
+```
+
+f) Confirm that there are no negative ride length values and that this data can
+be used.
+
+```{r, eval= FALSE}
+#No negative ride_length is found 
+#  Min. 1st Qu.  Median    Mean     3rd Qu.    Max. 
+#    0     384     677      1091    1207      93596
+summary(total_trip_data$ride_length)
+```
+
+
+### 4) ANALYZE
+
+##### Aggregate your data so it’s useful and accessible.
+Aggregated the following data and formatted it into a data frame:
+- Average *ride_length* by rider type.
+- Median *ride_length* by rider type.
+- Maximum *ride_length* by rider type.
+- Minimum *ride_length* by rider type.
+- Average *ride_length* per day of the week by rider type.
+```{r, eval= FALSE}
+agg_total_trip <- data.frame(
+  "mean" =
+    c(aggregate(total_trip_data$ride_length ~ 
+                  total_trip_data$member_casual, FUN = mean)),
+  "median" = 
+    c(aggregate(total_trip_data$ride_length ~ 
+                  total_trip_data$member_casual, FUN = median)),
+  "max" =
+    c(aggregate(total_trip_data$ride_length ~ 
+                  total_trip_data$member_casual, FUN = max)),
+  "min" = 
+    c(aggregate(total_trip_data$ride_length ~ 
+                  total_trip_data$member_casual, FUN = min)),
+  "avg ride time per day" =
+    c(aggregate(total_trip_data$ride_length ~ 
+                  total_trip_data$member_casual 
+                + total_trip_data$day_of_week, FUN = mean))
+)
+
+#Transposed aggregated data for easier readability
+agg_total_trip <- data.frame (t(agg_total_trip))
+
+```
+
+##### Organize and format your data.
+##### Perform calculations.
+##### Identify trends and relationships.
+
+
+### 5) ACT
+
+### 6) SHARE
 
 ## Sources
 
@@ -108,3 +321,37 @@ git config --global http.version HTTP/1.1
 Notes: started to work on the data set and realized its less than 2
 months of data, sample size of 30 people, and it was supposed to be for
 women , but the mix is men and women
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

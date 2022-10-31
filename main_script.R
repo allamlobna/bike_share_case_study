@@ -2,11 +2,11 @@
 
 install.packages(tidyverse)
 install.packages(lubridate)
-install.packages(ggplot)
+install.packages(ggplot2)
 install.packages(janitor)
 library(tidyverse)
 library(lubridate)
-library(ggplot)
+library(ggplot2)
 library(janitor)
 
 
@@ -59,7 +59,6 @@ compare_df_cols(april_21_trip_data,
 #Combined all df's into one
 
 total_trip_data <- rbind(april_21_trip_data,
-                         april_21_trip_data,
                          may_21_trip_data, 
                          june_21_trip_data,
                          july_21_trip_data, 
