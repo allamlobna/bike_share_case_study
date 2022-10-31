@@ -1,16 +1,15 @@
 ---
 title: "Bike Share Case Study"
+subtitle: "Google Data Analytics Certificate Capstone Project"
+author: "Lobna Allam"
+date: "October 31, 2022"
 output:
   html_document:
     toc: true
-    theme: united
+    theme: paper
+
+  
 ---
-
-# Bike Share Case Study
-
-Google Data Analytics Certificate Capstone Project
-
-
 ## Scenario
 
 You are a junior data analyst working in the marketing analyst team at
@@ -23,29 +22,19 @@ convert casual riders into annual members. But first, Cyclistic
 executives must approve your recommendations, so they must be backed up
 with compelling data insights and professional data visualizations.
 
-### Deliverables
 
-1.  A clear summary of the business task
-2.  A description of all data sources used
-3.  Documentation of any cleaning or manipulation of data
-4.  A summary of your analysis
-5.  Supporting visualizations and key findings
-6.  High-level content recommendations based on your analysis
-
-
-
-## Data Analysis Process <a name="Data_Analysis_Process"></a>
+## Data Analysis Process
 
 ### 1) ASK
 
-##### Guiding Questions
+##### **Guiding Questions**
 -   How do annual members and casual riders use Cyclistic bikes
     differently?
 -   Why would casual riders buy Cyclistic annual memberships?
 -   How can Cyclistic use digital media to influence casual riders to
     become members?
 
-##### Consider key stakeholders
+##### **Consider key stakeholders**
 
 -   **Lily Moreno:** The director of marketing and your manager. Moreno
     is responsible for the development of campaigns and initiatives to
@@ -55,57 +44,58 @@ with compelling data insights and professional data visualizations.
     executive team will decide whether to approve the recommended
     marketing program.
 
-##### Identify the Business Task 
+##### **Identify the Business Task** 
 Both the Director of Marketing and finance analysts have concluded that 
-annual members are more profitable. 
-
-I will present marketing strategies aimed at converting casual riders 
-into annual members. 
+annual members are more profitable in previous analysis. 
+Therefore, the business task is to **present marketing strategies aimed at converting casual riders into annual members.**  
 
 ### 2) PREPARE
 
-##### Download data and store it appropriately.
+##### **Download data and store it appropriately.**
 Data was retrieved from the [Kaggle Cyclistic Bike Share dataset](https://www.kaggle.com/datasets/evangower/cyclistic-bike-share). 
 12 CSV files were downloaded and saved locally prior to importing the files 
 into RStudio.
 
-##### Identify how it’s organized. 
+##### **Identify how it’s organized.** 
 12 months (April 2021 - March 2022) of Cyclistic Bike Share data is organized
 into 12 separate CSV (comma separated values) files. There are 15 columns per 
 CSV with varying data types.
 
-##### Verify the data's credibility.
-The provided data
+##### **Verify the data's credibility.**
+- The data is slightly outdated as the last dataset was collected 8 months ago.
+- Due to COVID-19 lockdowns and provisions, the data may not be an accurate 
+representation of how different members use the bike share service.
+- The provided data has been made available by *Motivate International Inc.* 
+under this [license](https://ride.divvybikes.com/data-license-agreement).
+- This is a public dataset that respects data-privacy by removing riders'
+personally identifiable information.
 
 
 ### 3) PROCESS 
-
-##### Check the data for errors.
-
-##### Choose your tools.
-- **Excel** - Preview the data initially, referenced any errors that 
-arose during the cleaning process, and added the ride_length column.
-- **R** - Clean, Process, and initial data visualizations.
+*Code chunks show sections of the script that was used to complete the project.*
+##### **Choose your tools.**
+- **Excel** - Preview the data initially, cross-referenced with any errors that 
+arose during the cleaning process, and added the *ride_length* column.
+- **R** - Clean, process, and developed initial data visualizations.
 - **Tableau** - Visualize the data and create a dashboard.
 
-##### Transform the data so you can work with it effectively. 
+##### **Transform the data so you can work with it effectively.** 
 
-**Spreadsheets - Excel**
+###### **Spreadsheets - Excel**
 
 a) Added a column to each CSV file, *ride_length*, and formatted as HH:MM:SS. 
 =(ended_at - started_at)
 b) Created a column in all CSVs called *day_of_week*, and calculated 
 the day of the week that each ride started using the “WEEKDAY” function.
 
-**R - RStudio and Github for rev. control**
+###### **R - RStudio and Github for revision control**
 
 c) Installed all necessary packages.
-```{r, eval= FALSE}
-
-install.packages(tidyverse)
-install.packages(lubridate)
-install.packages(ggplot2)
-install.packages(janitor)
+```{r eval=FALSE, error=FALSE, message=FALSE, warning=FALSE, include=FALSE, results='hide'}
+install.packages("tidyverse", repos = "http://cran.us.r-project.org")
+install.packages("lubridate", repos = "http://cran.us.r-project.org")
+install.packages("ggplot2", repos = "http://cran.us.r-project.org")
+install.packages("janitor", repos = "http://cran.us.r-project.org")
 library(tidyverse)
 library(lubridate)
 library(ggplot2)
@@ -114,7 +104,7 @@ library(janitor)
 ```
 d) Imported all data sets.
 
-```{r, eval= FALSE}
+```{r eval=FALSE}
 april_21_trip_data <- read_csv("202104-divvy-tripdata.csv")
 may_21_trip_data <- read_csv("202105-divvy-tripdata.csv")
 june_21_trip_data <- read_csv("202106-divvy-tripdata.csv")
@@ -135,12 +125,12 @@ rider_types were to be removed as part of the cleaning process, nothing
 was done during this step. problem() was used after removing *docked_bike* rows 
 and the data did not have any parsing issues.
 
-```{r, eval= FALSE}
+```{r eval=FALSE}
 problems(april_21_trip_data)
-problems(may_21_trip_data)
-problems(june_21_trip_data)
+#problems(may_21_trip_data)
+#problems(june_21_trip_data)
 #...
-problems(march_22_trip_data)
+#problems(march_22_trip_data)
 ```
 
 f) Wrangled data and combined into single file. Using Janitor package, compared 
@@ -177,12 +167,15 @@ total_trip_data <- rbind(april_21_trip_data,
                          jan_22_trip_data,
                          feb_22_trip_data,
                          march_22_trip_data)
+str(total_trip_data)
 ```
 
-##### Document the cleaning process.
+##### **Document the cleaning process.**
 
 a) Confirmed there are two types of members and three types of bikes.
-Members: casual, member
+
+Members: *casual*, *member*
+
 Bikes: *classic_bike, electric_bike, docked_bike*
 
 ```{r, eval= FALSE}
@@ -199,16 +192,13 @@ total number of docked_bike to ensure that total removed is correct
 ```{r, eval= FALSE}
 table(total_trip_data$rideable_type)
 
-#classic_bike   docked_bike electric_bike 
-#2790047        321282       1272661
+```
 
+```{r, eval= FALSE}
 total_trip_data <- 
   total_trip_data[!grepl('docked_bike', total_trip_data$rideable_type),]
 
 table(total_trip_data$rideable_type)
-
-#classic_bike electric_bike 
-#2790047       1272661
 ```
 
 c) Confirmed that there are no problems found in the data frame as expected in 
@@ -217,32 +207,34 @@ step e.
 problems(total_trip_data)
 ```
 
-d) *start_station_name*, *end_station_name*, *start_station_id*, and *end_station_id* have over 700,000 null values. Columns were removed as the latitude and longitude can be used for ride paths. This also reduced the overall data set size to be less than 1GB and can be used on Tableau Public.
+d) *start_station_name*, *end_station_name*, *start_station_id*, and *end_station_id* have over 700,000 null values. Columns were removed as the latitude and longitude can be used for ride paths. This also reduced the overall data set size to be less than 1GB which is the limit on Tableau Public.
 
 ```{r, eval= FALSE}
 #Removed start_station_name and end_station_name columns
 sum(is.na(total_trip_data$start_station_name))
 sum(is.na(total_trip_data$end_station_name))
-
+```
+```{r, eval= FALSE}
 total_trip_data = subset(total_trip_data, select = 
                            -c(start_station_name,end_station_name))
-
+```
+```{r, eval= FALSE}
 #Removed start_station_id and end_station_id columns
 sum(is.na(total_trip_data$start_station_id))
 sum(is.na(total_trip_data$end_station_id))
-
+```
+```{r, eval= FALSE}
 total_trip_data = subset(total_trip_data, select = 
                            -c(start_station_id,end_station_id))
 ```
 
-e) To find max and min *ride_length*, must convert to seconds. Originally in 
-HMS then converted to the nearest second.
+e) To confirm that there are no negative *ride_length* values, needed to find the max and min. Originally in 
+HMS format then converted to the nearest second to convert the column to an integer data type.
 ```{r, eval= FALSE}
 total_trip_data$ride_length <- seconds(hms(total_trip_data$ride_length))
 total_trip_data$ride_length <- period_to_seconds(total_trip_data$ride_length)
 sum(is.na(total_trip_data$ride_length))
 
-#145 NA 
 ```
 
 f) Remove all rows with NA *ride_length* values and check that all have been removed.
@@ -250,24 +242,19 @@ f) Remove all rows with NA *ride_length* values and check that all have been rem
 ```{r, eval= FALSE}
 total_trip_data <- drop_na(total_trip_data, ride_length)
 sum(is.na(total_trip_data$ride_length))
-#no NA values
 ```
 
-f) Confirm that there are no negative ride length values and that this data can
-be used.
+f) Confirm that there are no negative ride length values or obvious discrepancies.
 
 ```{r, eval= FALSE}
-#No negative ride_length is found 
-#  Min. 1st Qu.  Median    Mean     3rd Qu.    Max. 
-#    0     384     677      1091    1207      93596
 summary(total_trip_data$ride_length)
 ```
 
 
 ### 4) ANALYZE
 
-##### Aggregate your data so it’s useful and accessible.
-Aggregated the following data and formatted it into a data frame:
+##### **Aggregate your data so it’s useful and accessible.**
+a) Aggregated the following data and formatted it into a data frame:
 - Average *ride_length* by rider type.
 - Median *ride_length* by rider type.
 - Maximum *ride_length* by rider type.
@@ -292,15 +279,47 @@ agg_total_trip <- data.frame(
                   total_trip_data$member_casual 
                 + total_trip_data$day_of_week, FUN = mean))
 )
-
+```
+b) Transposed aggregated data for easier readability
+```{r, eval= FALSE}
 #Transposed aggregated data for easier readability
 agg_total_trip <- data.frame (t(agg_total_trip))
 
 ```
+c) Prior to exporting the cleaned and transformed dataset, a quick visualization was created in R.
+```{r, eval= FALSE}
+#number of rides by rider type
+total_trip_data %>% 
+  mutate(weekday = wday(day_of_week, label = TRUE)) %>% 
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, weekday)  %>% 
+  ggplot(aes(x = weekday, y = number_of_rides, fill = member_casual)) +
+  geom_col(position = "dodge") + 
+  labs(title = "Number of Rides by Rider Type", x = "Weekday", 
+       y = "Number of Rides", fill = "Rider Type")
+```
 
-##### Organize and format your data.
-##### Perform calculations.
-##### Identify trends and relationships.
+
+```{r, eval= FALSE}
+#average duration
+total_trip_data %>% 
+  mutate(weekday = wday(day_of_week, label = TRUE)) %>%
+  group_by(member_casual, weekday) %>% 
+  summarise(number_of_rides = n()
+            ,average_duration = mean(ride_length)) %>% 
+  arrange(member_casual, weekday)  %>% 
+  ggplot(aes(x = weekday, y = average_duration, fill = member_casual)) +
+  geom_col(position = "dodge") + 
+  labs(title = "Average Ride Length by Rider Type", x = "Weekday", 
+       y = "Ride Length", fill = "Rider Type")
+```
+d) Dataset was exported to a CSV for use in Tableau.
+```{r, eval= FALSE}
+write.csv(total_trip_data,"C:\\Users\\...total_trip_data.csv", row.names = FALSE)
+```
+##### **Identify trends and relationships.**
 
 
 ### 5) ACT
@@ -309,18 +328,10 @@ agg_total_trip <- data.frame (t(agg_total_trip))
 
 ## Sources
 
-<https://www.kaggle.com/datasets/arashnic/fitbit>
+- <https://www.kaggle.com/datasets/arashnic/fitbit>
 
-## Tools
 
--   Github
--   BigQuery
--   Visual Studio Code
--   Excel
 
-Notes: started to work on the data set and realized its less than 2
-months of data, sample size of 30 people, and it was supposed to be for
-women , but the mix is men and women
 
 
 

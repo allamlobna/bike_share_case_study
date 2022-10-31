@@ -160,10 +160,6 @@ agg_total_trip <- data.frame(
 #Transposed aggregated data for easier readability
 agg_total_trip <- data.frame (t(agg_total_trip))
 
-
-write.csv(total_trip_data,"C:\\Users\\allam\\Documents\\GitHub\\bike_share_case_study\\total_trip_data.csv", row.names = FALSE)
-
-
 #number of rides by rider type
 total_trip_data %>% 
   mutate(weekday = wday(day_of_week, label = TRUE)) %>% 
@@ -175,7 +171,6 @@ total_trip_data %>%
   geom_col(position = "dodge") + 
   labs(title = "Number of Rides by Rider Type", x = "Weekday", 
        y = "Number of Rides", fill = "Rider Type")
-
 
 #average duration
 total_trip_data %>% 
@@ -190,6 +185,7 @@ total_trip_data %>%
        y = "Ride Length", fill = "Rider Type")
 
 
-
+write.csv(total_trip_data,"C:\\Users\\allam\\Documents\\GitHub\\
+          bike_share_case_study\\total_trip_data.csv", row.names = FALSE)
 
 
