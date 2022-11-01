@@ -7,9 +7,15 @@ output:
   html_document:
     toc: true
     theme: paper
-
-  
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
+
+```{r echo=FALSE, out.width = "30%", fig.align = "center"}
+knitr::include_graphics("logo.png")
+```
+
 ## Scenario
 
 You are a junior data analyst working in the marketing analyst team at
@@ -22,12 +28,12 @@ convert casual riders into annual members. But first, Cyclistic
 executives must approve your recommendations, so they must be backed up
 with compelling data insights and professional data visualizations.
 
-
 ## Data Analysis Process
 
 ### 1) ASK
 
 ##### **Guiding Questions**
+
 -   How do annual members and casual riders use Cyclistic bikes
     differently?
 -   Why would casual riders buy Cyclistic annual memberships?
@@ -44,54 +50,82 @@ with compelling data insights and professional data visualizations.
     executive team will decide whether to approve the recommended
     marketing program.
 
-##### **Identify the Business Task** 
-Both the Director of Marketing and finance analysts have concluded that 
-annual members are more profitable in previous analysis. 
-Therefore, the business task is to **present marketing strategies aimed at converting casual riders into annual members.**  
+##### **Identify the Business Task**
+
+Both the Director of Marketing and finance analysts have concluded that
+annual members are more profitable in previous analysis. Therefore, the
+business task is to **present marketing strategies aimed at converting
+casual riders into annual members.**
 
 ### 2) PREPARE
 
 ##### **Download data and store it appropriately.**
-Data was retrieved from the [Kaggle Cyclistic Bike Share dataset](https://www.kaggle.com/datasets/evangower/cyclistic-bike-share). 
-12 CSV files were downloaded and saved locally prior to importing the files 
-into RStudio.
 
-##### **Identify how it’s organized.** 
-12 months (April 2021 - March 2022) of Cyclistic Bike Share data is organized
-into 12 separate CSV (comma separated values) files. There are 15 columns per 
-CSV with varying data types.
+-   Bike Share data was retrieved from the [Kaggle Cyclistic Bike Share
+    dataset](https://www.kaggle.com/datasets/evangower/cyclistic-bike-share).
+    12 CSV files were downloaded and saved locally prior to importing
+    the files into RStudio.
+-   Chicago weather dataset is from the [National Centers for
+    Environmental
+    Information](https://www.ncei.noaa.gov/cdo-web/datasets/GHCND/locations/CITY:US170006/detail).
+    The dataset was filtered to April 2021 - March 2022 and downloaded
+    as a CSV file.
+
+##### **Identify how it's organized.**
+
+-   Bike Share: 12 months (April 2021 - March 2022) of Cyclistic Bike
+    Share data is organized into 12 separate CSV (comma separated
+    values) files. There are 15 columns per CSV with varying data types.
+-   Weather: A CSV file of the weather in Chicago from April 2021 -
+    March 2022.
 
 ##### **Verify the data's credibility.**
-- The data is slightly outdated as the last dataset was collected 8 months ago.
-- Due to COVID-19 lockdowns and provisions, the data may not be an accurate 
-representation of how different members use the bike share service.
-- The provided data has been made available by *Motivate International Inc.* 
-under this [license](https://ride.divvybikes.com/data-license-agreement).
-- This is a public dataset that respects data-privacy by removing riders'
-personally identifiable information.
 
+###### **Bike Share Data**
 
-### 3) PROCESS 
-*Code chunks show sections of the script that was used to complete the project.*
-##### **Choose your tools.**
-- **Excel** - Preview the data initially, cross-referenced with any errors that 
-arose during the cleaning process, and added the *ride_length* column.
-- **R** - Clean, process, and developed initial data visualizations.
-- **Tableau** - Visualize the data and create a dashboard.
+-   The data is slightly outdated as the last dataset was collected 8
+    months ago.
+-   Due to COVID-19 lockdowns and provisions, the data may not be an
+    accurate representation of how different members use the bike share
+    service.
+-   The provided data has been made available by *Motivate International
+    Inc.* under this
+    [license](https://ride.divvybikes.com/data-license-agreement).
+-   This is a public dataset that respects data-privacy by removing
+    riders' personally identifiable information.
 
-##### **Transform the data so you can work with it effectively.** 
+###### **Weather Data**
+
+-   Dataset includes data from 405 different stations within the city of
+    Chicago and the period of this record is 100% coverage.
+-   The dataset is provided by a government entity for public use.
+-   The National Climatic Data Center offers the data for free and
+    ensures that the content is available and accessible to all.
+
+### 3) PROCESS
+
+*Code chunks show sections of the script that was used to complete the
+project.* \##### **Choose your tools.** - **Excel** - Preview the data
+initially, cross-referenced with any errors that arose during the
+cleaning process, and added the *ride_length* column. - **R** - Clean,
+process, and developed initial data visualizations. - **Tableau** -
+Visualize the data and create a dashboard.
+
+##### **Transform the data so you can work with it effectively.**
 
 ###### **Spreadsheets - Excel**
 
-a) Added a column to each CSV file, *ride_length*, and formatted as HH:MM:SS. 
-=(ended_at - started_at)
-b) Created a column in all CSVs called *day_of_week*, and calculated 
-the day of the week that each ride started using the “WEEKDAY” function.
+a)  Added a column to each CSV file, *ride_length*, and formatted as
+    HH:MM:SS. =(ended_at - started_at)
+b)  Created a column in all CSVs called *day_of_week*, and calculated
+    the day of the week that each ride started using the "WEEKDAY"
+    function.
 
 ###### **R - RStudio and Github for revision control**
 
-c) Installed all necessary packages.
-```{r eval=FALSE, error=FALSE, message=FALSE, warning=FALSE, include=FALSE, results='hide'}
+c)  Installed all necessary packages.
+
+```{r error=FALSE, message=FALSE, warning=FALSE, results='hide'}
 install.packages("tidyverse", repos = "http://cran.us.r-project.org")
 install.packages("lubridate", repos = "http://cran.us.r-project.org")
 install.packages("ggplot2", repos = "http://cran.us.r-project.org")
@@ -102,9 +136,10 @@ library(ggplot2)
 library(janitor)
 
 ```
-d) Imported all data sets.
 
-```{r eval=FALSE}
+d)  Imported all datasets.
+
+```{r error=FALSE, message=FALSE, warning=FALSE, results='hide'}
 april_21_trip_data <- read_csv("202104-divvy-tripdata.csv")
 may_21_trip_data <- read_csv("202105-divvy-tripdata.csv")
 june_21_trip_data <- read_csv("202106-divvy-tripdata.csv")
@@ -118,14 +153,17 @@ jan_22_trip_data <- read_csv("202201-divvy-tripdata.csv")
 feb_22_trip_data <- read_csv("202202-divvy-tripdata.csv")
 march_22_trip_data <- read_csv("202203-divvy-tripdata.csv")
 ```
-e) When importing CSV files, warning message about parsing issues arose. This 
-was due to *docked_bike* rows having a ride_length of multiple days. Excel did 
-not format these columns as HH:MM:SS, however, because *docked_bike* 
-rider_types were to be removed as part of the cleaning process, nothing 
-was done during this step. problem() was used after removing *docked_bike* rows 
-and the data did not have any parsing issues.
 
-```{r eval=FALSE}
+e)  When importing CSV files, warning message about parsing issues
+    arose. This was due to *docked_bike* rows having a ride_length of
+    multiple days. These rows were referenced in Excel and the errors
+    appeared in the corresponding rows in the CSV files. Because
+    *docked_bike* rider_types were to be removed as part of the cleaning
+    process, nothing was done during this step. problem() will be used
+    after removing *docked_bike* rows to confirm that all errors have
+    been removed.
+
+```{r echo=TRUE}
 problems(april_21_trip_data)
 #problems(may_21_trip_data)
 #problems(june_21_trip_data)
@@ -133,10 +171,10 @@ problems(april_21_trip_data)
 #problems(march_22_trip_data)
 ```
 
-f) Wrangled data and combined into single file. Using Janitor package, compared 
-columns in data frames for inconsistencies. None found.
+f)  Wrangled data and combined into single file. Using Janitor package,
+    compared columns in data frames for inconsistencies. None found.
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 compare_df_cols(april_21_trip_data,
                 may_21_trip_data, 
                 june_21_trip_data,
@@ -152,9 +190,10 @@ compare_df_cols(april_21_trip_data,
                 return = "mismatch")
 ```
 
-g) Combined all data frames into one master data frame *total_trip_data*.
+g)  Combined all data frames into one master data frame
+    *total_trip_data*.
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 total_trip_data <- rbind(april_21_trip_data,
                          may_21_trip_data, 
                          june_21_trip_data,
@@ -172,92 +211,113 @@ str(total_trip_data)
 
 ##### **Document the cleaning process.**
 
-a) Confirmed there are two types of members and three types of bikes.
+a)  Confirmed that there are two types of members and three types of
+    bikes.
 
 Members: *casual*, *member*
 
 Bikes: *classic_bike, electric_bike, docked_bike*
 
-```{r, eval= FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 rider_types <- total_trip_data %>%
   group_by(rideable_type, member_casual)
 
 summarize(rider_types)
 ```
 
-b) *docked_bike* is when bikes were taken out of docks and checked for quality.
-This is irrelevant to the study, so removed from *total_trip_data*. Obtained 
-total number of docked_bike to ensure that total removed is correct
+b)  *docked_bike* is when bikes were taken out of docks and checked for
+    quality. This is irrelevant to the study, so removed from
+    *total_trip_data*. Obtained total number of docked_bike to ensure
+    that total removed is correct
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 table(total_trip_data$rideable_type)
 
 ```
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 total_trip_data <- 
   total_trip_data[!grepl('docked_bike', total_trip_data$rideable_type),]
 
 table(total_trip_data$rideable_type)
 ```
 
-c) Confirmed that there are no problems found in the data frame as expected in 
-step e.
-```{r, eval= FALSE}
+c)  Confirmed that there are no problems found in the data frame as
+    expected in step e.
+
+```{r echo=TRUE}
 problems(total_trip_data)
 ```
 
-d) *start_station_name*, *end_station_name*, *start_station_id*, and *end_station_id* have over 700,000 null values. Columns were removed as the latitude and longitude can be used for ride paths. This also reduced the overall data set size to be less than 1GB which is the limit on Tableau Public.
+d)  *start_station_name*, *end_station_name*, *start_station_id*, and
+    *end_station_id* have over 700,000 null values. Columns were removed
+    as the latitude and longitude can be used for ride paths. This also
+    reduced the overall dataset size to be less than 1GB which is the
+    limit on Tableau Public.
 
-```{r, eval= FALSE}
-#Removed start_station_name and end_station_name columns
+```{r echo=TRUE}
+#Finding total NA values in start_station_name and end_station_name
 sum(is.na(total_trip_data$start_station_name))
 sum(is.na(total_trip_data$end_station_name))
 ```
-```{r, eval= FALSE}
+
+```{r echo=TRUE}
+#Removed start_station_name and end_station_name columns
 total_trip_data = subset(total_trip_data, select = 
                            -c(start_station_name,end_station_name))
 ```
-```{r, eval= FALSE}
-#Removed start_station_id and end_station_id columns
+
+```{r echo=TRUE}
+#Finding total NA values in start_station_id and end_station_id
 sum(is.na(total_trip_data$start_station_id))
 sum(is.na(total_trip_data$end_station_id))
 ```
-```{r, eval= FALSE}
+
+```{r echo=TRUE}
+#Removed start_station_id and end_station_id columns
 total_trip_data = subset(total_trip_data, select = 
                            -c(start_station_id,end_station_id))
 ```
 
-e) To confirm that there are no negative *ride_length* values, needed to find the max and min. Originally in 
-HMS format then converted to the nearest second to convert the column to an integer data type.
-```{r, eval= FALSE}
+e)  To confirm that there are no negative *ride_length* values, we must
+    find the max and min. Originally in HMS format then converted to the
+    nearest seconds.
+
+```{r echo=TRUE}
 total_trip_data$ride_length <- seconds(hms(total_trip_data$ride_length))
+
+#period_to_seconds() are used parse the time
 total_trip_data$ride_length <- period_to_seconds(total_trip_data$ride_length)
 sum(is.na(total_trip_data$ride_length))
 
 ```
 
-f) Remove all rows with NA *ride_length* values and check that all have been removed.
+f)  Remove all rows with NA *ride_length* values and check that all have
+    been removed.
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 total_trip_data <- drop_na(total_trip_data, ride_length)
 sum(is.na(total_trip_data$ride_length))
 ```
 
-f) Confirm that there are no negative ride length values or obvious discrepancies.
+f)  Confirm that there are no negative ride length values or obvious
+    discrepancies.
 
-```{r, eval= FALSE}
+```{r echo=TRUE}
 summary(total_trip_data$ride_length)
 ```
 
-##### **Aggregate your data so it’s useful and accessible.**
-a) Aggregated the following data and formatted it into a data frame:
-- Average *ride_length* by rider type.
-- Median *ride_length* by rider type.
-- Maximum *ride_length* by rider type.
-- Minimum *ride_length* by rider type.
-- Average *ride_length* per day of the week by rider type.
-```{r, eval= FALSE}
+##### **Aggregate your data so it's useful and accessible.**
+
+a)  Aggregated the following data and formatted it into a data frame:
+
+-   Average *ride_length* by rider type.
+-   Median *ride_length* by rider type.
+-   Maximum *ride_length* by rider type.
+-   Minimum *ride_length* by rider type.
+-   Average *ride_length* per day of the week by rider type.
+
+```{r echo=TRUE}
 agg_total_trip <- data.frame(
   "mean" =
     c(aggregate(total_trip_data$ride_length ~ 
@@ -277,14 +337,19 @@ agg_total_trip <- data.frame(
                 + total_trip_data$day_of_week, FUN = mean))
 )
 ```
-b) Transposed aggregated data for easier readability
-```{r, eval= FALSE}
+
+b)  Transposed aggregated data for easier readability
+
+```{r echo=TRUE}
 #Transposed aggregated data for easier readability
 agg_total_trip <- data.frame (t(agg_total_trip))
 
 ```
-c) Prior to exporting the cleaned and transformed dataset, a quick visualization was created in R.
-```{r, eval= FALSE}
+
+c)  Prior to exporting the cleaned and transformed dataset, a quick
+    visualization was created in R.
+
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 #number of rides by rider type
 total_trip_data %>% 
   mutate(weekday = wday(day_of_week, label = TRUE)) %>% 
@@ -298,8 +363,7 @@ total_trip_data %>%
        y = "Number of Rides", fill = "Rider Type")
 ```
 
-
-```{r, eval= FALSE}
+```{r echo=TRUE, message=FALSE, warning=FALSE}
 #average duration
 total_trip_data %>% 
   mutate(weekday = wday(day_of_week, label = TRUE)) %>%
@@ -315,84 +379,114 @@ total_trip_data %>%
 
 ### 4 & 5) ANALYZE and SHARE
 
-a) Dataset was exported to a CSV for use in Tableau.
+a)  Dataset was exported to a CSV for use in Tableau.
+
 ```{r, eval= FALSE}
 write.csv(total_trip_data,"C:\\Users\\...total_trip_data.csv", row.names = FALSE)
 ```
 
-
 ##### **Identify trends and relationships.**
 
+###### **Ridership:**
 
-###### **Ridership:** 
 Members had more trips than casual riders.
 
-###### **Daily Ridership:** 
-Members had  more rides during the week than casual riders, but casual riders 
-more rides during the weekend. This indicates that members use the service to
-commute to and from work while casual riders use this for leisure purposes.
+###### **Daily Ridership:**
 
-###### **Average Ride Length:** 
-On average, casual riders' trips were approximately 10mins longer than member
-trips.
+Members had more rides during the week than casual riders, but casual
+riders had more rides during the weekend. This indicates that members
+use the service to commute to and from work while casual riders use this
+for leisure purposes.
 
-###### **Average Ride Length per Weekday:** 
-Casual riders always had longer trips per day than members. This did not change
-on the weekends.
+###### **Average Ride Length:**
 
-###### **Monthly Ridership:** 
-Generally, members had more rides per month than casual riders. The increase in 
-total trips during the summer months can be attributed to warmer temperatures.
+On average, casual riders' trips were approximately 10 minutes longer
+than member trips.
 
-###### **Ridership Vs. Temperature:** 
+###### **Average Ride Length Per Weekday:**
 
+Casual riders always had longer trips per day than members. This did not
+change on the weekends.
 
-###### **Trip Start Time:** 
+###### **Monthly Ridership:**
 
+Generally, members had more rides per month than casual riders. The
+increase in total trips during the summer months can be attributed to
+warmer temperatures.
 
+###### **Bike Type:**
 
-<div class='tableauPlaceholder' id='viz1667237725638' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bi&#47;BikeShareCaseStudy_16672345574370&#47;Ridership&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='BikeShareCaseStudy_16672345574370&#47;Ridership' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bi&#47;BikeShareCaseStudy_16672345574370&#47;Ridership&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                
+Classic bikes were used more often by both members and casual riders.
 
+###### **Ridership Vs. Temperature:**
 
-```{js, embedcode, echo =FALSE} 
+There appears to be a positive correlation between the number of rides
+and the average temperature for that day. A power regression shows that
+casual riders tend to ride more when the temperature is warmer.
+
+###### **Trip Start Time:**
+
+The two graphs compare the number of trips by rider type during the week
+on the weekend. The graph shows that both rider types start their trips
+at similar times on the weekend, but that members start their trips
+mostly at 8AM and 5PM on the weekdays. This indicates that members use
+the bike share service to commute to and from work.
+
+::: {#viz1667237725638 .tableauPlaceholder style="position: relative"}
+<noscript><a href='#'><img src="https://public.tableau.com/static/images/Bi/BikeShareCaseStudy_16672345574370/Ridership/1_rss.png" alt=" " style="border: none"/></a></noscript>
+
+<object class="tableauViz" style="display:none;">
+
+<param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+<param name='embed_code_version' value='3' />
+<param name='site_root' value='' /><param name='name' value='BikeShareCaseStudy_16672345574370&#47;Ridership' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bi&#47;BikeShareCaseStudy_16672345574370&#47;Ridership&#47;1.png' />
+<param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' />
+
+</object>
+:::
+
+```{js, embedcode, echo =FALSE}
 
 var divElement = document.getElementById('viz1667237725638');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);              
 ```
 
-
-
-
 ### 6) ACT
 
-## Sources
+##### **Conclusion**
 
+###### The following conclusions can be deduced from the analysis:
 
+-   Members use the bike share service 17% more than casual riders.
+-   Members use the bike share service to commute to and from work.
+-   Casual riders ride their bikes for approximately 10 minutes longer
+    than members on average.
+-   There are more trips during the summer months, peaking in July.
+-   As the temperature gets warmer, the number of trips increase. More
+    so for the casual riders than the members.
 
+##### **Next Steps**
 
+###### My recommendations to the stakeholders:
 
+-   Offer reduced membership pricing in the winter months as there are
+    less riders during that time.
+-   Offer a membership plan for 6 months instead of an annual
+    membership. If most riders only use the service when it is warmer
+    out, this may be an appealing subscription.
+-   Offer a membership service that is based on ride length or total
+    minutes traveled. This may entice casual riders as they tend to have
+    longer ride lengths on average.
+-   Launch social media ads for subscriptions in May as this is when
+    people begin utilizing the bike share service.
 
+##### **Additional Data**
 
+###### Requests for additional data:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-   The total number of electric and classic bike types available. This
+    would show what type was preferred by the riders. The current data
+    does not show how many are available.
+-   Membership ID's would show how often the same rider uses the
+    service.
+-   Membership ID's would show us how often the same rider travels the
+    same path.

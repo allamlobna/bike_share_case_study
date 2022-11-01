@@ -7,5 +7,5 @@
 *.Rproj.user
 *.RDataTmp
 *.Rproj
-
-.Rproj.user
+*rsconnect/
+*.Rproj.user
