@@ -250,9 +250,6 @@ f) Confirm that there are no negative ride length values or obvious discrepancie
 summary(total_trip_data$ride_length)
 ```
 
-
-### 4) ANALYZE
-
 ##### **Aggregate your data so it’s useful and accessible.**
 a) Aggregated the following data and formatted it into a data frame:
 - Average *ride_length* by rider type.
@@ -315,26 +312,59 @@ total_trip_data %>%
   labs(title = "Average Ride Length by Rider Type", x = "Weekday", 
        y = "Ride Length", fill = "Rider Type")
 ```
-d) Dataset was exported to a CSV for use in Tableau.
+
+### 4 & 5) ANALYZE and SHARE
+
+a) Dataset was exported to a CSV for use in Tableau.
 ```{r, eval= FALSE}
 write.csv(total_trip_data,"C:\\Users\\...total_trip_data.csv", row.names = FALSE)
 ```
+
+
 ##### **Identify trends and relationships.**
 
 
-### 5) ACT
+###### **Ridership:** 
+Members had more trips than casual riders.
 
-### 6) SHARE
+###### **Daily Ridership:** 
+Members had  more rides during the week than casual riders, but casual riders 
+more rides during the weekend. This indicates that members use the service to
+commute to and from work while casual riders use this for leisure purposes.
+
+###### **Average Ride Length:** 
+On average, casual riders' trips were approximately 10mins longer than member
+trips.
+
+###### **Average Ride Length per Weekday:** 
+Casual riders always had longer trips per day than members. This did not change
+on the weekends.
+
+###### **Monthly Ridership:** 
+Generally, members had more rides per month than casual riders. The increase in 
+total trips during the summer months can be attributed to warmer temperatures.
+
+###### **Ridership Vs. Temperature:** 
+
+
+###### **Trip Start Time:** 
+
+
+
+<div class='tableauPlaceholder' id='viz1667237725638' style='position: relative'><noscript><a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bi&#47;BikeShareCaseStudy_16672345574370&#47;Ridership&#47;1_rss.png' style='border: none' /></a></noscript><object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='site_root' value='' /><param name='name' value='BikeShareCaseStudy_16672345574370&#47;Ridership' /><param name='tabs' value='yes' /><param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;Bi&#47;BikeShareCaseStudy_16672345574370&#47;Ridership&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                
+
+
+```{js, embedcode, echo =FALSE} 
+
+var divElement = document.getElementById('viz1667237725638');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);              
+```
+
+
+
+
+### 6) ACT
 
 ## Sources
-
-- <https://www.kaggle.com/datasets/arashnic/fitbit>
-
-
-
-
-
-
 
 
 
