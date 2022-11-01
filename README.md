@@ -9,6 +9,6 @@ An exploratory data analysis was completed on the Cyclistic bike share company a
 - R
 - Tableau
 
-### View markdown file [here.](https://rpubs.com/lobnaallam/bike-share-case-study)
+### View data analysis process [here.](https://rpubs.com/lobnaallam/bike-share-case-study)
 
 ### View Tableau Viz [here.](https://public.tableau.com/views/BikeShareCaseStudy_16672345574370/RidershipVs_Temperature?:language=en-US&:display_count=n&:origin=viz_share_link)
