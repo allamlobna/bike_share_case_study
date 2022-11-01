@@ -1,4 +1,4 @@
-# BikeShareCaseStudy
+# Bike Share Case Study
 
 This is the capstone project for the Google Data Analytics Professional Certificate. 
 
