@@ -105,11 +105,11 @@ casual riders into annual members.**
 ### 3) PROCESS
 
 *Code chunks show sections of the script that was used to complete the
-project.* \##### **Choose your tools.** - **Excel** - Preview the data
-initially, cross-referenced with any errors that arose during the
-cleaning process, and added the *ride_length* column. - **R** - Clean,
-process, and developed initial data visualizations. - **Tableau** -
-Visualize the data and create a dashboard.
+project.
+##### **Choose your tools.** 
+- **Excel** - Preview the data initially, cross-referenced with any errors that arose during the cleaning process, and added the *ride_length* column. 
+- **R** - Clean,process, and developed initial data visualizations. 
+- **Tableau** - Visualize the data and create a dashboard.
 
 ##### **Transform the data so you can work with it effectively.**
 
